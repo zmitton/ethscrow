@@ -27,26 +27,58 @@ function refreshBalances() {
   }
 };
 
-function holdEth() {
+holdEth = function(){
   var amount = Math.floor(document.getElementById("amount").value * 1000000000000000000);
-  var receiver = document.getElementById("receiver").value;
   var owner1 = document.getElementById("owner1").value;
   var owner2 = document.getElementById("owner2").value;
 
-  setStatus("Initiating transaction... (please wait)");
 
-  ethscrow.holdEth(receiver, owner1, owner2, {from: , value: amount, gas: 1000000}).then(function(response) {
-    console.log(response);
+  if(typeof web3 === 'undefined'){
+    alert('Please Download Metamask')
+  }else{
+    // var name = document.getElementById('nameField').value;
+    web3.eth.getAccounts(function(e, accounts){
+      if(accounts && accounts.length > 0){
+        console.log('ACCOUNT: ', accounts[0])
+        var userAddress = accounts[0];
+        ethscrow.holdEth(owner1, owner2, {value: amount, from: userAddress},function(e,txHash){
+          if(txHash){ 
+            // console.log('TXHASH: ', txHash)
+            // getAddresses();
+            document.getElementById('success').innerHTML = "Thank You";
+          }else{
+            console.log(e)
+          }
+        })
+      }else{
+        console.log(e)
+        alert("Please open metamask")
+      }
+    })
+  }
 
-    setStatus("Transaction complete!");
-    refreshBalances();
-  }).catch(function(e) {
-    console.log(e);
-    setStatus("Error; See Log");
-    if(web3.eth.accounts[0] != accounts[0]){
-       setStatus("Make sure account " +accounts[0]+ " is unlocked in wallet")
-    }
-  });
+
+
+
+
+
+
+
+
+  // setStatus("Initiating transaction... (please wait)");
+
+  // ethscrow.holdEth(receiver, owner1, owner2, {from: , value: amount, gas: 1000000}).then(function(response) {
+  //   console.log(response);
+
+  //   setStatus("Transaction complete!");
+  //   refreshBalances();
+  // }).catch(function(e) {
+  //   console.log(e);
+  //   setStatus("Error; See Log");
+  //   if(web3.eth.accounts[0] != accounts[0]){
+  //      setStatus("Make sure account " +accounts[0]+ " is unlocked in wallet")
+  //   }
+  // });
 };
 
 // function signRelease() {
