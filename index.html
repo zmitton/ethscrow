@@ -3,21 +3,26 @@
 <head>
   <meta name='viewport' content='width=device-width' />
   <title>Ethscrow</title>
+  <script src="index.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 <body>
   <h1>Ethscrow</h1><br>
+
+  <table><thead><tr><th>Amount</th><th>Owner 1</th><th>Owner 2</th><th>Signature 1</th><th>Signature 2</th></tr></thead><tbody id="holdingTable"></tbody></table>
+
+
   <table><thead><tr><th>Account#</th><th>Balance (ETH)</th></tr></thead><tbody id="balances"></tbody></table>
 
   <br>
   <h2>Hold Coin</h2>
   <br><label for="amount">Amount:</label><input type="text" id="amount" placeholder="e.g., 95"></input>
-  <br><label for="receiver">To:</label><input type="text" id="receiver" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
   
-  <br><br><label for="signer_1">Signer:</label><input type="text" id="signer_1" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
+  <br><br><label for="owner1">Owner 1:</label><input type="text" id="owner1" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
+  <br><br><label for="owner2">Owner 2:</label><input type="text" id="owner2" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
   
-  <br><br><button id="send" onclick="holdCoin()">Send Escrow</button>
+  <br><br><button id="send" onclick="holdEth()">Send Escrow</button>
   <br><br><br>
   <span id="status"></span>
 
