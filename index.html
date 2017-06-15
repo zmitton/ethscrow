@@ -9,14 +9,14 @@
 </head>
 <body>
   <h1>Ethscrow</h1><br>
-
-  <table><thead><tr><th>Amount</th><th>Owner 1</th><th>Owner 2</th><th>Signature 1</th><th>Signature 2</th></tr></thead><tbody id="holdingTable"></tbody></table>
+  <h2>Currently on Rinkeby</h2>
+  <table><thead><tr><th>ID</th><th>Amount(ETH)</th><th>Owner 1</th><th>Owner 2</th><th>Signature 1</th><th>Signature 2</th></tr></thead><tbody id="holdingTable"></tbody></table>
 
 
   <table><thead><tr><th>Account#</th><th>Balance (ETH)</th></tr></thead><tbody id="balances"></tbody></table>
 
   <br>
-  <h2>Hold Coin</h2>
+  <h2>Hold ETH</h2>
   <br><label for="amount">Amount:</label><input type="text" id="amount" placeholder="e.g., 95"></input>
   
   <br><br><label for="owner1">Owner 1:</label><input type="text" id="owner1" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
@@ -26,8 +26,9 @@
   <br><br><br>
   <span id="status"></span>
 
-  <h2>Release Coin</h2>
-  <br><label for="receiver">Holding Number:</label><input type="text" id="holdingNumber" placeholder="e.g., 1, 2, 3"></input>
+  <h2>Sign Release To</h2>
+  <br><label for="holdingID">Holding ID:</label><input type="text" id="holdingID" placeholder="e.g., 1, 2, 3"></input>
+  <br><label for="recipient">Recipient:</label><input type="text" id="recipient" placeholder="e.g., 0x93e66d9baea28c17d9fc393b53e3fbdd76899dae"></input>
   
   <br><br><button id="send" onclick="signRelease()">Release Escrow</button>
   <br><br>

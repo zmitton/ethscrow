@@ -39,6 +39,8 @@ h3 {
   font-size: 24px;
 }
 
+tr:nth-child(even) {background: #EEE;}
+
 .black {
   color: black;
 }

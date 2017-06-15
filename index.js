@@ -7,28 +7,28 @@
 //   status.innerHTML = message;
 // };
 
-function refreshBalances() {
-  var contract = ethscrow.deployed();
-  var balanceTable = document.getElementById('balances');
-  balanceTable.innerHTML = "";
-  for (var i = 0; i < web3.eth.accounts.length ; i++) {
-    var value = web3.eth.getBalance(web3.eth.accounts[i])/(web3.toWei(1, "ether"));
-    var row =  document.createElement("tr");
-    var isCoinbase =  document.createElement("td");
-    var accountData =  document.createElement("td");
-    var balanceData =  document.createElement("td");
-    accountData.innerHTML = web3.eth.accounts[i];
-    balanceData.innerHTML = Math.round(value.valueOf()*1000)/1000 + " ETH";
-    isCoinbase.innerHTML = i == 0 ? "ACTIVE COINBASE" : "";
-    row.appendChild(isCoinbase);
-    row.appendChild(accountData);
-    row.appendChild(balanceData);
-    balanceTable.appendChild(row);
-  }
-};
+// function refreshBalances() {
+//   var contract = ethscrow.deployed();
+//   var balanceTable = document.getElementById('balances');
+//   balanceTable.innerHTML = "";
+//   for (var i = 0; i < web3.eth.accounts.length ; i++) {
+//     var value = web3.eth.getBalance(web3.eth.accounts[i])/(web3.toWei(1, "ether"));
+//     var row =  document.createElement("tr");
+//     var isCoinbase =  document.createElement("td");
+//     var accountData =  document.createElement("td");
+//     var balanceData =  document.createElement("td");
+//     accountData.innerHTML = web3.eth.accounts[i];
+//     balanceData.innerHTML = Math.round(value.valueOf()*1000)/1000 + " ETH";
+//     isCoinbase.innerHTML = i == 0 ? "ACTIVE COINBASE" : "";
+//     row.appendChild(isCoinbase);
+//     row.appendChild(accountData);
+//     row.appendChild(balanceData);
+//     balanceTable.appendChild(row);
+//   }
+// };
 
 holdEth = function(){
-  var amount = Math.floor(document.getElementById("amount").value * 1000000000000000000);
+  var amount = Math.floor(document.getElementById("amount").value * 1e18);
   var owner1 = document.getElementById("owner1").value;
   var owner2 = document.getElementById("owner2").value;
 
@@ -43,9 +43,10 @@ holdEth = function(){
         var userAddress = accounts[0];
         ethscrow.holdEth(owner1, owner2, {value: amount, from: userAddress},function(e,txHash){
           if(txHash){ 
-            // console.log('TXHASH: ', txHash)
-            // getAddresses();
-            document.getElementById('success').innerHTML = "Thank You";
+            console.log('holdEthHASH: ', txHash)
+            // document.getElementById('success').innerHTML = "Thank You";
+            getHoldingData();
+
           }else{
             console.log(e)
           }
@@ -56,14 +57,6 @@ holdEth = function(){
       }
     })
   }
-
-
-
-
-
-
-
-
 
   // setStatus("Initiating transaction... (please wait)");
 
@@ -81,22 +74,47 @@ holdEth = function(){
   // });
 };
 
-// function signRelease() {
-//   var contract = ethscrow.deployed();
-//   var holdingNumber = Number(document.getElementById("holdingNumber").value);
+function signRelease() {
 
-//   setStatus("Initiating transaction... (please wait)");
+  var holdingID = Number(document.getElementById("holdingID").value);
+  var recipient = document.getElementById("recipient").value;
+  if(typeof web3 === 'undefined'){
+    alert('Please Download Metamask')
+  }else{
+    // var name = document.getElementById('nameField').value;
+    web3.eth.getAccounts(function(e, accounts){
+      if(accounts && accounts.length > 0){
+        console.log('ACCOUNT: ', accounts[0])
+        var userAddress = accounts[0];
+        ethscrow.signRelease(holdingID, recipient, {from: userAddress},function(e,txHash){
+          if(txHash){ 
+            console.log('signReleaseHASH: ', txHash)
+            // document.getElementById('success').innerHTML = "Thank You";
+            getHoldingData();
+          }else{
+            console.log(e)
+          }
+        })
+      }else{
+        console.log(e)
+        alert("Please open metamask")
+      }
+    })
+  }
 
-//   contract.signRelease(holdingNumber, {from: web3.eth.accounts[0], gas: 1000000 }).then(function(response) {
-//     console.log(response);
 
-//     setStatus("Transaction complete!");
-//     refreshBalances();
-//   }).catch(function(e) {
-//     console.log(e);
-//     setStatus("Error sending coin; see log.");
-//   });
-// };
+  // setStatus("Initiating transaction... (please wait)");
+
+  // contract.signRelease(holdingNumber, {from: web3.eth.accounts[0], gas: 1000000 }).then(function(response) {
+  //   console.log(response);
+
+  //   setStatus("Transaction complete!");
+  //   refreshBalances();
+  // }).catch(function(e) {
+  //   console.log(e);
+  //   setStatus("Error sending coin; see log.");
+  // });
+};
 
 
 
@@ -158,10 +176,10 @@ renderHolding = function(ID, holding){
   }else{
     var holdingTable = document.getElementById('holdingTable');
     var tr = document.createElement("tr");
-    tr.id = holding+ID;
+    tr.id = "holding" + ID;
     holdingTable.appendChild(tr);
   }
-  tr.innerHTML = '<td>'+ holding[0] +'</td><td>'+ holding[1] +'</td><td>'+ holding[2] +'</td><td>'+ holding[3] +'</td><td>'+ holding[4] +'</td>';
+  tr.innerHTML = '<td>'+ ID +'</td><td>'+ holding[0]/1e18 +'</td><td>'+ holding[1].substring(10,0) +'...</td><td>'+ holding[2].substring(10,0) +'...</td><td>'+ holding[3].substring(10,0) +'...</td><td>'+ holding[4].substring(10,0) +'...</td>';
 }
 
 
